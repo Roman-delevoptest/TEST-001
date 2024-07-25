@@ -1,0 +1,26 @@
+import getpass
+import requests
+from requests.auth import HTTPBasicAuth
+
+def prompt_github_password():
+    username = input("Enter your GitHub username: ")
+    password = getpass.getpass("Enter your GitHub password: ")
+    
+    return username, password
+
+def check_github_credentials(username, password):
+    # This example checks the credentials by attempting to access the user's repositories
+    url = "https://api.github.com/user/repos"
+    
+    response = requests.get(url, auth=HTTPBasicAuth(username, password))
+    
+    if response.status_code == 200:
+        print("Authentication successful!")
+    elif response.status_code == 401:
+        print("Authentication failed. Please check your username and password.")
+    else:
+        print(f"An error occurred: {response.status_code}")
+    
+if __name__ == "__main__":
+    username, password = prompt_github_password()
+    check_github_credentials(username, password)
